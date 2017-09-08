@@ -110,6 +110,55 @@ if (signArtifacts) {
 	}
 }
 
+uploadArchives {
+
+	dependsOn check
+
+	repositories {
+		mavenDeployer {
+
+			if (signArtifacts) {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			}
+
+			def ossrhUsername = rootProject.hasProperty('ossrhUsername') ? rootProject.ossrhUsername : ''
+			def ossrhPassword = rootProject.hasProperty('ossrhPassword') ? rootProject.ossrhPassword : ''
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name "${project.group}:${project.name}"
+				packaging 'jar'
+				description "@API Guardian"
+				url 'https://github.com/apiguardian-team/apiguardian'
+
+				scm {
+					connection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
+					developerConnection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
+					url 'https://github.com/apiguardian-team/apiguardian'
+				}
+
+				licenses {
+					license {
+						name 'The Apache License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+			}
+
+			pom.whenConfigured { p ->
+				p.dependencies = p.dependencies.findAll { dep -> dep.scope != 'test' }
+			}
+		}
+	}
+}
+
 task wrapper(type: Wrapper) {
 	description = 'Generates gradlew and gradlew.bat scripts'
 	gradleVersion = '4.1'
