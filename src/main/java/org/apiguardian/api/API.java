@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apiguardian;
+package org.apiguardian.api;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.FIELD;

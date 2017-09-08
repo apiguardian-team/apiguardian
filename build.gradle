@@ -71,7 +71,7 @@ jar {
 			'Implementation-Title': project.name,
 			'Implementation-Version': project.version,
 			'Implementation-Vendor': 'apiguardian.org',
-			'Automatic-Module-Name': 'org.apiguardian'
+			'Automatic-Module-Name': 'org.apiguardian.api'
 		)
 	}
 }
