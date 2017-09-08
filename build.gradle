@@ -30,6 +30,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
 apply plugin: 'net.nemerosa.versioning'
+apply plugin: "org.ajoberstar.github-pages"
 
 description = '@API Guardian'
 
@@ -158,6 +159,50 @@ uploadArchives {
 		}
 	}
 }
+
+def docsVersion = project.version.contains('SNAPSHOT') ? 'snapshot' : project.version
+def docsDir = new File(buildDir, 'ghpages-docs')
+
+task prepareDocsForUploadToGhPages(dependsOn: [javadoc], type: Copy) {
+	outputs.dir docsDir
+
+	from("$buildDir/docs") {
+		include 'javadoc/**'
+	}
+	into "${docsDir}/${docsVersion}"
+	filesMatching('javadoc/**') { fileCopyDetails ->
+		fileCopyDetails.path = fileCopyDetails.path.replace('javadoc/', 'api/')
+	}
+	includeEmptyDirs = false
+}
+
+task createCurrentDocsFolder(dependsOn: prepareDocsForUploadToGhPages, type: Copy) {
+	outputs.dir "${docsDir}/current"
+
+	from "${docsDir}/${docsVersion}"
+	into "${docsDir}/current"
+}
+
+createCurrentDocsFolder.onlyIf { project.hasProperty('replaceCurrentDocs') }
+
+githubPages {
+	repoUri = 'https://github.com/apiguardian-team/apiguardian.git'
+
+	credentials {
+		username = project.hasProperty('githubToken') ? project.githubToken : ''
+		password = ''
+	}
+
+	pages {
+		from docsDir
+		into "docs"
+	}
+
+	deleteExistingFiles = false
+}
+
+prepareGhPages.dependsOn(prepareDocsForUploadToGhPages)
+prepareGhPages.dependsOn(createCurrentDocsFolder)
 
 task wrapper(type: Wrapper) {
 	description = 'Generates gradlew and gradlew.bat scripts'
