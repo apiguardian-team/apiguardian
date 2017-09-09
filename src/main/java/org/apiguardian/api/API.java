@@ -28,13 +28,15 @@ import java.lang.annotation.Target;
 
 /**
  * {@code @API} is used to annotate public types, methods, constructors, and
- * fields within a framework or application in order to indicate their level of
- * stability and how they are intended to be used by consumers of the API.
+ * fields within a framework or application in order to publish their
+ * {@link #status} and level of stability and to indicate how they are intended
+ * to be used by {@link #consumers} of the API.
  *
- * <p>If {@code @API} is present on a type, it is considered to hold for
- * all public members of the type as well. However, a member of such an
- * annotated type is allowed to declare a different {@link Status} of lower
- * stability.
+ * <p>If {@code @API} is present on a type, it is considered to hold for all
+ * public members of the type as well. However, a member of such an annotated
+ * type is allowed to declare a {@link Status} of lower stability. For example,
+ * a class annotated with {@code @API(status = STABLE)} may declare a constructor
+ * for internal usage that is annotated with {@code @API(status = INTERNAL)}.
  *
  * @since 1.0
  */
