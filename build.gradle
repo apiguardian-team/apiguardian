@@ -151,6 +151,14 @@ uploadArchives {
 						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 					}
 				}
+
+				developers {
+					developer {
+						id 'apiguardian'
+						name '@API Guardian Team'
+						email 'team@apiguardian.org'
+					}
+				}
 			}
 
 			pom.whenConfigured { p ->
