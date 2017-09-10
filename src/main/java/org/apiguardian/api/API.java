@@ -97,16 +97,16 @@ public @interface API {
 		EXPERIMENTAL,
 
 		/**
-		 * Intended for features that will not be changed in a backwards-
-		 * incompatible way for at least the next minor release of the current
-		 * major version. If scheduled for removal, such a feature will be
-		 * demoted to {@link #DEPRECATED} first.
+		 * Intended for features that will not be changed in a backwards-incompatible
+		 * way for at least the next minor release of the current major version.
+		 * If scheduled for removal, such a feature will be demoted to
+		 * {@link #DEPRECATED} first.
 		 */
 		MAINTAINED,
 
 		/**
-		 * Intended for features that will not be changed in a backwards-
-		 * incompatible way in the current major version.
+		 * Intended for features that will not be changed in a backwards-incompatible
+		 * way in the current major version.
 		 */
 		STABLE;
 
