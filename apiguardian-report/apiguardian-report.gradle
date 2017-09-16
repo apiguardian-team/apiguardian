@@ -1,0 +1,17 @@
+
+compileJava {
+	// please also update accordingly the animalsniffer config down below when changing the compatibility settings
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+}
+
+compileTestJava {
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+}
+
+dependencies {
+	api(project(":apiguardian-api"))
+	implementation("io.github.lukehutch:fast-classpath-scanner:2.4.5")
+	implementation("org.slf4j:slf4j-api:1.7.25")
+}

@@ -1,1 +1,9 @@
-rootProject.name = 'apiguardian-api'
+include ":apiguardian-api"
+include ":apiguardian-report"
+
+// check that every subproject has a custom build file
+// based on the project name
+rootProject.children.each { project ->
+	project.buildFileName = "${project.name}.gradle"
+	assert project.buildFile.isFile()
+}
