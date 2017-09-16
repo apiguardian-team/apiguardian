@@ -5,48 +5,26 @@ buildscript {
 		maven {
 			url 'https://plugins.gradle.org/m2/'
 		}
+		jcenter()
 	}
 	dependencies {
 		classpath 'org.ajoberstar:gradle-git:1.7.2'
 		classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
+		classpath 'com.netflix.nebula:gradle-aggregate-javadocs-plugin:2.2.+'
 	}
 }
 
 plugins {
 	id 'net.nemerosa.versioning' version '2.6.1'
 }
+apply plugin: "nebula-aggregate-javadocs"
+apply plugin: "org.ajoberstar.github-pages"
 
 Date buildTimeAndDate = new Date()
 ext {
 	buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
 	buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
 	builtByValue = project.hasProperty('builtBy') ? project.builtBy : project.defaultBuiltBy
-}
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
-apply plugin: 'net.nemerosa.versioning'
-apply plugin: "org.ajoberstar.github-pages"
-
-description = '@API Guardian'
-
-repositories {
-	mavenCentral()
-}
-
-compileJava {
-	// please also update accordingly the animalsniffer config down below when changing the compatibility settings
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
-}
-
-compileTestJava {
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
 }
 
 def normalizeVersion = { versionLiteral ->
@@ -57,112 +35,123 @@ def normalizeVersion = { versionLiteral ->
 	}
 }
 
-jar {
-	manifest {
-		attributes(
-			'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
-			'Built-By': builtByValue,
-			'Build-Date': buildDate,
-			'Build-Time': buildTime,
-			'Build-Revision': versioning.info.commit,
-			'Specification-Title': project.name,
-			'Specification-Version': normalizeVersion(project.version),
-			'Specification-Vendor': 'apiguardian.org',
-			'Implementation-Title': project.name,
-			'Implementation-Version': project.version,
-			'Implementation-Vendor': 'apiguardian.org',
-			'Automatic-Module-Name': 'org.apiguardian.api'
-		)
-	}
-}
+subprojects {
+	apply plugin: 'java-library'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	apply plugin: 'maven'
+	apply plugin: 'signing'
+	apply plugin: 'net.nemerosa.versioning'
 
-javadoc {
-	options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
-	options.author = true
-	options.header = '@API Guardian'
-	options.addStringOption('Xdoclint:html,syntax,reference', '-quiet')
-	options.links 'https://docs.oracle.com/javase/6/docs/api/'
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar) {
-	classifier = 'javadoc'
-	from javadoc
-}
-
-artifacts {
-	archives sourcesJar
-	archives javadocJar
-}
-
-animalsniffer {
-	signature = "org.codehaus.mojo.signature:java16:+@signature"
-}
-
-def signArtifacts = !project.version.contains('SNAPSHOT')
-
-if (signArtifacts) {
-	signing {
-		sign configurations.archives
-	}
-}
-
-uploadArchives {
-
-	dependsOn check
+	description = '@API Guardian'
 
 	repositories {
-		mavenDeployer {
+		mavenCentral()
+	}
 
-			if (signArtifacts) {
-				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-			}
+	jar {
+		manifest {
+			attributes(
+				'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
+				'Built-By': builtByValue,
+				'Build-Date': buildDate,
+				'Build-Time': buildTime,
+				'Build-Revision': versioning.info.commit,
+				'Specification-Title': project.name,
+				'Specification-Version': normalizeVersion(project.version),
+				'Specification-Vendor': 'apiguardian.org',
+				'Implementation-Title': project.name,
+				'Implementation-Version': project.version,
+				'Implementation-Vendor': 'apiguardian.org',
+				'Automatic-Module-Name': 'org.apiguardian.api'
+			)
+		}
+	}
 
-			def ossrhUsername = rootProject.hasProperty('ossrhUsername') ? rootProject.ossrhUsername : ''
-			def ossrhPassword = rootProject.hasProperty('ossrhPassword') ? rootProject.ossrhPassword : ''
+	javadoc {
+		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+		options.author = true
+		options.header = '@API Guardian'
+		options.addStringOption('Xdoclint:html,syntax,reference', '-quiet')
+		options.links 'https://docs.oracle.com/javase/6/docs/api/'
+	}
 
-			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-				authentication(userName: ossrhUsername, password: ossrhPassword)
-			}
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
 
-			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-				authentication(userName: ossrhUsername, password: ossrhPassword)
-			}
+	task javadocJar(type: Jar) {
+		classifier = 'javadoc'
+		from javadoc
+	}
 
-			pom.project {
-				name "${project.group}:${project.name}"
-				packaging 'jar'
-				description "@API Guardian"
-				url 'https://github.com/apiguardian-team/apiguardian'
+	artifacts {
+		archives sourcesJar
+		archives javadocJar
+	}
 
-				scm {
-					connection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
-					developerConnection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
+	def signArtifacts = !project.version.contains('SNAPSHOT')
+
+	if (signArtifacts) {
+		signing {
+			sign configurations.archives
+		}
+	}
+
+	uploadArchives {
+
+		dependsOn check
+
+		repositories {
+			mavenDeployer {
+
+				if (signArtifacts) {
+					beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+				}
+
+				def ossrhUsername = rootProject.hasProperty('ossrhUsername') ? rootProject.ossrhUsername : ''
+				def ossrhPassword = rootProject.hasProperty('ossrhPassword') ? rootProject.ossrhPassword : ''
+
+				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+
+				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+
+				pom.project {
+					name "${project.group}:${project.name}"
+					packaging 'jar'
+					description "@API Guardian"
 					url 'https://github.com/apiguardian-team/apiguardian'
-				}
 
-				licenses {
-					license {
-						name 'The Apache License, Version 2.0'
-						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					scm {
+						connection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
+						developerConnection 'scm:git:git://github.com/apiguardian-team/apiguardian.git'
+						url 'https://github.com/apiguardian-team/apiguardian'
+					}
+
+					licenses {
+						license {
+							name 'The Apache License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						}
+					}
+
+					developers {
+						developer {
+							id 'apiguardian'
+							name '@API Guardian Team'
+							email 'team@apiguardian.org'
+						}
 					}
 				}
 
-				developers {
-					developer {
-						id 'apiguardian'
-						name '@API Guardian Team'
-						email 'team@apiguardian.org'
-					}
+				pom.whenConfigured { p ->
+					p.dependencies = p.dependencies.findAll { dep -> dep.scope != 'test' }
 				}
-			}
-
-			pom.whenConfigured { p ->
-				p.dependencies = p.dependencies.findAll { dep -> dep.scope != 'test' }
 			}
 		}
 	}
@@ -171,46 +160,53 @@ uploadArchives {
 def docsVersion = project.version.contains('SNAPSHOT') ? 'snapshot' : project.version
 def docsDir = new File(buildDir, 'ghpages-docs')
 
-task prepareDocsForUploadToGhPages(dependsOn: [javadoc], type: Copy) {
-	outputs.dir docsDir
+tasks.whenTaskAdded {
+	Task thisTask = it
+	if (thisTask.name != "aggregateJavadocs") {
+		return
+	}
+	task prepareDocsForUploadToGhPages(type: Copy) {
+		dependsOn(thisTask)
+		outputs.dir docsDir
 
-	from("$buildDir/docs") {
-		include 'javadoc/**'
+		from("$buildDir/docs") {
+			include 'javadoc/**'
+		}
+		into "${docsDir}/${docsVersion}"
+		filesMatching('javadoc/**') { fileCopyDetails ->
+			fileCopyDetails.path = fileCopyDetails.path.replace('javadoc/', 'api/')
+		}
+		includeEmptyDirs = false
 	}
-	into "${docsDir}/${docsVersion}"
-	filesMatching('javadoc/**') { fileCopyDetails ->
-		fileCopyDetails.path = fileCopyDetails.path.replace('javadoc/', 'api/')
+
+	task createCurrentDocsFolder(dependsOn: prepareDocsForUploadToGhPages, type: Copy) {
+		outputs.dir "${docsDir}/current"
+
+		from "${docsDir}/${docsVersion}"
+		into "${docsDir}/current"
 	}
-	includeEmptyDirs = false
+
+	createCurrentDocsFolder.onlyIf { project.hasProperty('replaceCurrentDocs') }
+
+	githubPages {
+		repoUri = 'https://github.com/apiguardian-team/apiguardian.git'
+
+		credentials {
+			username = project.hasProperty('githubToken') ? project.githubToken : ''
+			password = ''
+		}
+
+		pages {
+			from docsDir
+			into "docs"
+		}
+
+		deleteExistingFiles = false
+	}
+
+	prepareGhPages.dependsOn(prepareDocsForUploadToGhPages)
+	prepareGhPages.dependsOn(createCurrentDocsFolder)
 }
-
-task createCurrentDocsFolder(dependsOn: prepareDocsForUploadToGhPages, type: Copy) {
-	outputs.dir "${docsDir}/current"
-
-	from "${docsDir}/${docsVersion}"
-	into "${docsDir}/current"
-}
-
-createCurrentDocsFolder.onlyIf { project.hasProperty('replaceCurrentDocs') }
-
-githubPages {
-	repoUri = 'https://github.com/apiguardian-team/apiguardian.git'
-
-	credentials {
-		username = project.hasProperty('githubToken') ? project.githubToken : ''
-		password = ''
-	}
-
-	pages {
-		from docsDir
-		into "docs"
-	}
-
-	deleteExistingFiles = false
-}
-
-prepareGhPages.dependsOn(prepareDocsForUploadToGhPages)
-prepareGhPages.dependsOn(createCurrentDocsFolder)
 
 task wrapper(type: Wrapper) {
 	description = 'Generates gradlew and gradlew.bat scripts'

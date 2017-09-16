@@ -1,0 +1,16 @@
+apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
+
+compileJava {
+    // please also update accordingly the animalsniffer config down below when changing the compatibility settings
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
+compileTestJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
+animalsniffer {
+    signature = "org.codehaus.mojo.signature:java16:+@signature"
+}
