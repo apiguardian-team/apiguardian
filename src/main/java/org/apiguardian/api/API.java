@@ -87,8 +87,17 @@ public @interface API {
 		DEPRECATED,
 
 		/**
+		 * Intended for new, experimental features where the API is highly unstable and may vary a lot or be removed.
+		 * This status usually shouldn't end up in non-snapshot releases.
+		 *
+		 * <p>Use with caution. Might be promoted to {@link #EXPERIMENTAL}, but might also be removed without
+		 * prior notice.
+		 */
+		INCUBATING,
+
+		/**
 		 * Intended for new, experimental features where the publisher of the
-		 * API is looking for feedback.
+		 * API is looking for feedback, but the general idea for an API is tried out and won't morph rapidly.
 		 *
 		 * <p>Use with caution. Might be promoted to {@link #MAINTAINED} or
 		 * {@link #STABLE} in the future, but might also be removed without
