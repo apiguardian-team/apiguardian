@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    //todo: changes compatibility to use Predicate -
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+//todo: can we use Lombok? it will clean up implementation a bit, but I'm not sure whether we want any dependencies
+//todo: fill the rest of buildscript in a way that matches apiguardian-report
+//todo: proper tests
