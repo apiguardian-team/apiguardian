@@ -3,7 +3,7 @@ package org.apiguardian.contract;
 /**
  * Describes state of the API element (a feature) in context of some version.
  * Explicitly maps to org.apiguardian.api.API.Status and extends status set with NONE.
- *
+ * <p>
  * There is no mapping method (that would turn mentioned enum to this one) to avoid dependency on API module.
  */
 public enum APIElementState {
