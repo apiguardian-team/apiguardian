@@ -5,7 +5,13 @@ import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;
 
-public final class StateTransitionRule {
+/**
+ * Single rule describing allowed API element state transitions between versions.
+ * Package-private, because it shouldn't be used by 3rd parties, but rather wrapped in graph-defining class used by them.
+ *
+ * Use utility factory methods to create instances for readability.
+ */
+final class StateTransitionRule {
     private Predicate<APIElementState> previousStatePredicate;
     private Predicate<APIElementState> nextStatePredicate;
     private boolean requiresMajorVersionIncrement;
@@ -20,14 +26,23 @@ public final class StateTransitionRule {
         this.requiresMinorVersionIncrement = requiresMinorVersionIncrement;
     }
 
+    /**
+     * If the transition between states allowed?
+     * @param previousState State of a feature in previous analysed version
+     * @param nextState State of a feature in next analysed version
+     * @param majorVersionChanged Has major version component changed between previous and next analysed version?
+     * @param minorVersionChanged Has minor version component changed between previous and next analysed version?
+     * @return true if previous and next state predicates match arguments and major and minor version components changed
+     *      according to requirements
+     */
     public boolean isSatisfied(APIElementState previousState, APIElementState nextState,
                                boolean majorVersionChanged, boolean minorVersionChanged){
         return previousStatePredicate.test(previousState) && nextStatePredicate.test(nextState) &&
             (!requiresMajorVersionIncrement || majorVersionChanged) &&
+            //one could argue that following line should have one more alternative branch: ... || majorVersionChanged
+            //but this should be covered when defining a graph instead, not inside rule logic
             (!requiresMinorVersionIncrement || minorVersionChanged);
     }
-
-    //todo: better style in these utility methods (prevStatePREDICATE, break lines, etc)
 
     static StateTransitionRule anytime(APIElementState previousState, APIElementState nextState){
         return anytime(asList(previousState), asList(nextState));
@@ -41,27 +56,32 @@ public final class StateTransitionRule {
         return anytime(previousStates, asList(nextState));
     }
 
-    static StateTransitionRule anytime(Collection<APIElementState> previousStates, Collection<APIElementState> nextStates){
+    static StateTransitionRule anytime(Collection<APIElementState> previousStates,
+                                       Collection<APIElementState> nextStates){
         return anytime(previousStates::contains, nextStates::contains);
     }
 
-    static StateTransitionRule anytime(Predicate<APIElementState> previousState, Predicate<APIElementState> nextState){
-        return new StateTransitionRule(previousState, nextState, false, false);
+    static StateTransitionRule anytime(Predicate<APIElementState> previousStatePredicate,
+                                       Predicate<APIElementState> nextStatePredicate){
+        return new StateTransitionRule(previousStatePredicate, nextStatePredicate, false, false);
     }
 
-    static StateTransitionRule onMajorVersionIncrement(Collection<APIElementState> previousStates, Collection<APIElementState> nextStates){
+    static StateTransitionRule onMajorVersionIncrement(Collection<APIElementState> previousStates,
+                                                       Collection<APIElementState> nextStates){
         return onMajorVersionIncrement(previousStates::contains, nextStates::contains);
     }
 
-    static StateTransitionRule onMajorVersionIncrement(Predicate<APIElementState> previousState, Predicate<APIElementState> nextState){
-        return new StateTransitionRule(previousState, nextState, true, false);
+    static StateTransitionRule onMajorVersionIncrement(Predicate<APIElementState> previousStatePredicate,
+                                                       Predicate<APIElementState> nextStatePredicate){
+        return new StateTransitionRule(previousStatePredicate, nextStatePredicate, true, false);
     }
 
     static StateTransitionRule onMinorVersionIncrement(APIElementState previousState, APIElementState nextState){
         return onMinorVersionIncrement(previousState::equals, nextState::equals);
     }
 
-    static StateTransitionRule onMinorVersionIncrement(Predicate<APIElementState> previousState, Predicate<APIElementState> nextState){
-        return new StateTransitionRule(previousState, nextState, false,true);
+    static StateTransitionRule onMinorVersionIncrement(Predicate<APIElementState> previousStatePredicate,
+                                                       Predicate<APIElementState> nextStatePredicate){
+        return new StateTransitionRule(previousStatePredicate, nextStatePredicate, false,true);
     }
 }

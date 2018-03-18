@@ -1,6 +1,5 @@
 package org.apiguardian.contract;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +10,11 @@ import static java.util.Arrays.asList;
 import static org.apiguardian.contract.StateTransitionRule.*;
 import static org.apiguardian.contract.APIElementState.*;
 
+/**
+ * Class containing static methods for analysing API state graph.
+ * Internally holds static graph description and is able to query it to answer questions on transition validity
+ * or possible transitions.
+ */
 public class APIVersioningContract {
     private APIVersioningContract() {
     }
@@ -20,7 +24,6 @@ public class APIVersioningContract {
     public static List<StateTransitionRule> rules = asList(
         onMajorVersionIncrement(ALL_STATES, ALL_STATES),
         anytime(asList(INTERNAL, EXPERIMENTAL), NONE),
-        anytime(DEPRECATED, INTERNAL),
         onMinorVersionIncrement(DEPRECATED, NONE),
         anytime(EXPERIMENTAL, asList(DEPRECATED, MAINTAINED, STABLE)),
         onMinorVersionIncrement(MAINTAINED, DEPRECATED),
@@ -33,7 +36,7 @@ public class APIVersioningContract {
             map(rule ->
                 rule.isSatisfied(previousState, nextState, majorVersionChanged, minorVersionChanged)
             ).
-            findAny(). //todo: maybe findFirst would be better?
+            findAny().
             isPresent();
     }
 
@@ -55,5 +58,6 @@ public class APIVersioningContract {
             collect(Collectors.toSet());
     }
 
-    //todo: do we want queries like "major/minor version has to change for this transition to be valid?"
+    //todo: introduce VersionChangeEnum, replace two bool args with it
+    //todo: provide queries like "major/minor version has to change for this transition to be valid?"
 }
