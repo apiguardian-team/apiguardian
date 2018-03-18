@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+
+    compile project(":");
+    compile project(":apiguardian-descriptor-model")
+
+    //todo migrate to junit5
+    // https://mvnrepository.com/artifact/junit/junit
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    //todo it would be perfect if artifact to be described wouldnt have to be on classpath
+    testCompile project(":apiguardian-descriptor-example")
+
+}
+
+def exampleJarTask = (project(":apiguardian-descriptor-example").getTasksByName("jar", false) as List)[0]
+
+task(writeExampleJarPathToResources){
+    doFirst {
+        def f = file("src/test/resources/example_path.txt")
+        println f.absolutePath
+        if (!f.parentFile.exists())
+            f.parentFile.mkdirs()
+        f.text = (exampleJarTask as Jar).archivePath.absolutePath
+    }
+}
+
+test.dependsOn(exampleJarTask, writeExampleJarPathToResources)
