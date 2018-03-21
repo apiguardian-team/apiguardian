@@ -25,12 +25,14 @@ public class ApiDesciberTest {
     @Before
     @SneakyThrows
     public void setUp(){
-        @Cleanup BufferedReader r = new BufferedReader(
-            new InputStreamReader(
-                this.getClass().getResourceAsStream("/example_path.txt")
-            )
-        );
-        String path = r.readLine();
+//        @Cleanup BufferedReader r = new BufferedReader(
+//            new InputStreamReader(
+//                this.getClass().getResourceAsStream("/example_path.txt")
+//            )
+//        );
+//        String path = r.readLine();
+        //fixme: ugly, but hopefully will work with Travis CI
+        String path = "../apiguardian-descriptor-example/build/libs/apiguardian-descriptor-example-1.1.0-SNAPSHOT.jar";
         jarUrl = new File(path).toURI().toURL();
         IO.DescriptorIO io = IO.forApiDescriptor();
         @Cleanup InputStream expectedDescriptorStream = this.getClass().getResourceAsStream("/expected_example_descriptor.json");
