@@ -1,23 +1,26 @@
 package org.apiguardian.contract;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static org.apiguardian.contract.ApiElementState.*;
 import static org.apiguardian.contract.StateTransitionRule.*;
-import static org.apiguardian.contract.APIElementState.*;
 
 /**
  * Class containing static methods for analysing API state graph.
  * Internally holds static graph description and is able to query it to answer questions on transition validity
  * or possible transitions.
  */
-public class APIVersioningContract {
-    private APIVersioningContract() {
+public class ApiVersioningContract {
+    private ApiVersioningContract() {
     }
 
-    private static final Collection<APIElementState> ALL_STATES = asList(APIElementState.values());
+    private static final Collection<ApiElementState> ALL_STATES = asList(ApiElementState.values());
 
     public static List<StateTransitionRule> rules = asList(
         onMajorVersionIncrement(ALL_STATES, ALL_STATES),
@@ -25,7 +28,8 @@ public class APIVersioningContract {
         onMinorVersionIncrement(DEPRECATED, NONE),
         anytime(EXPERIMENTAL, asList(DEPRECATED, MAINTAINED, STABLE)),
         onMinorVersionIncrement(MAINTAINED, DEPRECATED),
-        anytime(MAINTAINED, STABLE)
+        anytime(MAINTAINED, STABLE),
+        anytime(NONE, ALL_STATES)
     );
 
     /**
@@ -36,12 +40,12 @@ public class APIVersioningContract {
      * @see VersionComponentChange
      * @return true if transition of feature state is valid, false in other case
      */
-    public static boolean isValidTransition(APIElementState previousState, APIElementState nextState,
+    public static boolean isValidTransition(ApiElementState previousState, ApiElementState nextState,
                                             VersionComponentChange versionComponentChange){
-        return rules.stream().
+        return (previousState == nextState) || rules.stream().
             map(rule ->
                 rule.isSatisfied(previousState, nextState, versionComponentChange)
-            ).
+            ).filter(x -> x).
             findAny().
             isPresent();
     }
@@ -53,9 +57,9 @@ public class APIVersioningContract {
      * @see VersionComponentChange
      * @return Set of valid states in which a feature can be in next version
      */
-    public static Set<APIElementState> findValidNextStates(APIElementState previousState,
+    public static Set<ApiElementState> findValidNextStates(ApiElementState previousState,
                                                            VersionComponentChange versionComponentChange){
-        return Stream.of(APIElementState.values()).
+        return Stream.of(ApiElementState.values()).
             filter(state ->
                 isValidTransition(previousState, state, versionComponentChange)
             ).
@@ -70,9 +74,9 @@ public class APIVersioningContract {
      * @see VersionComponentChange
      * @return Set of valid states in which a feature could be in previous version
      */
-    public static Set<APIElementState> findValidPreviousStates(APIElementState nextState,
+    public static Set<ApiElementState> findValidPreviousStates(ApiElementState nextState,
                                                                VersionComponentChange versionComponentChange){
-        return Stream.of(APIElementState.values()).
+        return Stream.of(ApiElementState.values()).
             filter(state ->
                 isValidTransition(state, nextState, versionComponentChange)
             ).
@@ -85,8 +89,8 @@ public class APIVersioningContract {
      * @param nextState State of the feature in next analysed version
      * @return Most specific change in version components for a transition to be valid
      */
-    public static VersionComponentChange findMostSpecificChangeForValidTransition(APIElementState previousState,
-                                                                                  APIElementState nextState){
+    public static VersionComponentChange findMostSpecificChangeForValidTransition(ApiElementState previousState,
+                                                                                  ApiElementState nextState){
         return Stream.of(VersionComponentChange.values()).filter(change ->
             isValidTransition(previousState, nextState, change)
         ).sorted(

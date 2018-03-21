@@ -17,7 +17,7 @@ package org.apiguardian.contract;
 //todo is "most specific" and "most general" good naming for version change "size"?
 // it seems quite natural to say that MAJOR version change is more general than MINOR, but I'm not sure whether
 // MINOR is more specific than MAJOR; still, I can't find a better phrasing for now
-// would that change, remember to propagate it to APIVersioningContract javadocs too
+// would that change, remember to propagate it to ApiVersioningContract javadocs too
 public enum VersionComponentChange {
     /**
      * No version component has changed.

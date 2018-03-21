@@ -12,12 +12,12 @@ import static java.util.Arrays.asList;
  * Use utility factory methods to create instances for readability.
  */
 final class StateTransitionRule {
-    private Predicate<APIElementState> previousStatePredicate;
-    private Predicate<APIElementState> nextStatePredicate;
+    private Predicate<ApiElementState> previousStatePredicate;
+    private Predicate<ApiElementState> nextStatePredicate;
     private VersionComponentChange requiredVersionComponentChange;
 
-    private StateTransitionRule(Predicate<APIElementState> previousStatePredicate,
-                                Predicate<APIElementState> nextStatePredicate,
+    private StateTransitionRule(Predicate<ApiElementState> previousStatePredicate,
+                                Predicate<ApiElementState> nextStatePredicate,
                                 VersionComponentChange requiredVersionComponentChange) {
         this.previousStatePredicate = previousStatePredicate;
         this.nextStatePredicate = nextStatePredicate;
@@ -33,50 +33,50 @@ final class StateTransitionRule {
      * @return true if previous and next state predicates match arguments and major and minor version components changed
      *      according to requirements
      */
-    public boolean isSatisfied(APIElementState previousState, APIElementState nextState,
+    public boolean isSatisfied(ApiElementState previousState, ApiElementState nextState,
                                VersionComponentChange versionComponentChange){
         return previousStatePredicate.test(previousState) && nextStatePredicate.test(nextState) &&
                 versionComponentChange.compareTo(requiredVersionComponentChange) >=0;
     }
 
-    static StateTransitionRule anytime(APIElementState previousState, APIElementState nextState){
+    static StateTransitionRule anytime(ApiElementState previousState, ApiElementState nextState){
         return anytime(asList(previousState), asList(nextState));
     }
 
-    static StateTransitionRule anytime(APIElementState previousState, Collection<APIElementState> nextStates){
+    static StateTransitionRule anytime(ApiElementState previousState, Collection<ApiElementState> nextStates){
         return anytime(asList(previousState), nextStates);
     }
 
-    static StateTransitionRule anytime(Collection<APIElementState> previousStates, APIElementState nextState){
+    static StateTransitionRule anytime(Collection<ApiElementState> previousStates, ApiElementState nextState){
         return anytime(previousStates, asList(nextState));
     }
 
-    static StateTransitionRule anytime(Collection<APIElementState> previousStates,
-                                       Collection<APIElementState> nextStates){
+    static StateTransitionRule anytime(Collection<ApiElementState> previousStates,
+                                       Collection<ApiElementState> nextStates){
         return anytime(previousStates::contains, nextStates::contains);
     }
 
-    static StateTransitionRule anytime(Predicate<APIElementState> previousStatePredicate,
-                                       Predicate<APIElementState> nextStatePredicate){
+    static StateTransitionRule anytime(Predicate<ApiElementState> previousStatePredicate,
+                                       Predicate<ApiElementState> nextStatePredicate){
         return new StateTransitionRule(previousStatePredicate, nextStatePredicate, VersionComponentChange.NONE);
     }
 
-    static StateTransitionRule onMajorVersionIncrement(Collection<APIElementState> previousStates,
-                                                       Collection<APIElementState> nextStates){
+    static StateTransitionRule onMajorVersionIncrement(Collection<ApiElementState> previousStates,
+                                                       Collection<ApiElementState> nextStates){
         return onMajorVersionIncrement(previousStates::contains, nextStates::contains);
     }
 
-    static StateTransitionRule onMajorVersionIncrement(Predicate<APIElementState> previousStatePredicate,
-                                                       Predicate<APIElementState> nextStatePredicate){
+    static StateTransitionRule onMajorVersionIncrement(Predicate<ApiElementState> previousStatePredicate,
+                                                       Predicate<ApiElementState> nextStatePredicate){
         return new StateTransitionRule(previousStatePredicate, nextStatePredicate, VersionComponentChange.MAJOR);
     }
 
-    static StateTransitionRule onMinorVersionIncrement(APIElementState previousState, APIElementState nextState){
+    static StateTransitionRule onMinorVersionIncrement(ApiElementState previousState, ApiElementState nextState){
         return onMinorVersionIncrement(previousState::equals, nextState::equals);
     }
 
-    static StateTransitionRule onMinorVersionIncrement(Predicate<APIElementState> previousStatePredicate,
-                                                       Predicate<APIElementState> nextStatePredicate){
+    static StateTransitionRule onMinorVersionIncrement(Predicate<ApiElementState> previousStatePredicate,
+                                                       Predicate<ApiElementState> nextStatePredicate){
         return new StateTransitionRule(previousStatePredicate, nextStatePredicate, VersionComponentChange.MINOR);
     }
 }

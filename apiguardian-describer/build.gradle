@@ -26,7 +26,6 @@ dependencies {
     compile project(":apiguardian-descriptor-model")
 
     //todo migrate to junit5
-    // https://mvnrepository.com/artifact/junit/junit
     testCompile group: 'junit', name: 'junit', version: '4.12'
     //todo it would be perfect if artifact to be described wouldnt have to be on classpath
     testCompile project(":apiguardian-descriptor-example")
@@ -38,7 +37,6 @@ def exampleJarTask = (project(":apiguardian-descriptor-example").getTasksByName(
 task(writeExampleJarPathToResources){
     doFirst {
         def f = file("src/test/resources/example_path.txt")
-        println f.absolutePath
         if (!f.parentFile.exists())
             f.parentFile.mkdirs()
         f.text = (exampleJarTask as Jar).archivePath.absolutePath
@@ -46,3 +44,8 @@ task(writeExampleJarPathToResources){
 }
 
 test.dependsOn(exampleJarTask, writeExampleJarPathToResources)
+
+//todo add internal classes to descriptor
+//todo javadocs
+//todo more extensive testing
+//todo proper submodules buildscripts

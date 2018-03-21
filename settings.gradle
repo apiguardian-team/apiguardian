@@ -1,5 +1,5 @@
 rootProject.name = 'apiguardian-api'
 include 'apiguardian-contract'
-include 'apiguardian-descriptor'
+include 'apiguardian-describer'
 include 'apiguardian-descriptor-model'
 include 'apiguardian-descriptor-example'

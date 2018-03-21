@@ -1,0 +1,58 @@
+{
+  "versionDescriptor" : "0.0.1-SNAPSHOT",
+  "library" : [ {
+    "partialName" : "some",
+    "subpackages" : [ {
+      "partialName" : "pkg",
+      "subpackages" : [ ],
+      "classes" : [ {
+        "name" : "A",
+        "visibility" : "PUBLIC",
+        "constructors" : [ {
+          "declaration" : "A()",
+          "visibility" : "PUBLIC",
+          "descriptor" : "STABLE"
+        } ],
+        "methods" : [ {
+          "declaration" : "int bar()",
+          "visibility" : "PUBLIC",
+          "descriptor" : "STABLE"
+        }, {
+          "declaration" : "java.lang.String foo()",
+          "visibility" : "PUBLIC",
+          "descriptor" : "STABLE"
+        }, {
+          "declaration" : "void foo(int)",
+          "visibility" : "PUBLIC",
+          "descriptor" : "STABLE"
+        } ],
+        "fields" : [ ]
+      }, {
+        "name" : "B",
+        "visibility" : "PUBLIC",
+        "constructors" : [ ],
+        "methods" : [ {
+          "declaration" : "void foo()",
+          "visibility" : "PUBLIC",
+          "descriptor" : "INTERNAL"
+        } ],
+        "fields" : [ ]
+      }, {
+        "name" : "C",
+        "visibility" : "PUBLIC",
+        "constructors" : [ {
+          "declaration" : "C(int)",
+          "visibility" : "PUBLIC",
+          "descriptor" : "EXPERIMENTAL"
+        } ],
+        "methods" : [ ],
+        "fields" : [ {
+          "declaration" : "int x",
+          "visibility" : "PKG",
+          "descriptor" : "MAINTAINED"
+        } ]
+      } ]
+    } ],
+    "classes" : [ ]
+  } ]
+}

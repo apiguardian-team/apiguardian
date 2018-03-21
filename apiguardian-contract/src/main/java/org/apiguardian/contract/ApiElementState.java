@@ -6,7 +6,7 @@ package org.apiguardian.contract;
  * <p>
  * There is no mapping method (that would turn mentioned enum to this one) to avoid dependency on API module.
  */
-public enum APIElementState {
+public enum ApiElementState {
     /**
      * Feature is not present in analysed version.
      */
