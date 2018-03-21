@@ -1,0 +1,89 @@
+{
+  "versionDescriptor" : {
+    "previousVersion" : "0.0.1-SNAPSHOT",
+    "nextVersion" : "0.0.2"
+  },
+  "library" : [ {
+    "partialName" : "some",
+    "subpackages" : [ {
+      "partialName" : "pkg",
+      "subpackages" : [ ],
+      "classes" : [ {
+        "name" : "A",
+        "visibility" : "PUBLIC",
+        "constructors" : [ {
+          "declaration" : "A()",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "STABLE",
+            "nextState" : "NONE"
+          }
+        }, {
+          "declaration" : "A(int)",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "NONE",
+            "nextState" : "EXPERIMENTAL"
+          }
+        } ],
+        "methods" : [ {
+          "declaration" : "int bar()",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "STABLE",
+            "nextState" : "STABLE"
+          }
+        }, {
+          "declaration" : "java.lang.String foo()",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "STABLE",
+            "nextState" : "MAINTAINED"
+          }
+        }, {
+          "declaration" : "void foo(int)",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "STABLE",
+            "nextState" : "STABLE"
+          }
+        } ],
+        "fields" : [ ]
+      }, {
+        "name" : "B",
+        "visibility" : "PUBLIC",
+        "constructors" : [ ],
+        "methods" : [ {
+          "declaration" : "void foo()",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "INTERNAL",
+            "nextState" : "NONE"
+          }
+        } ],
+        "fields" : [ ]
+      }, {
+        "name" : "C",
+        "visibility" : "PUBLIC",
+        "constructors" : [ {
+          "declaration" : "C(int)",
+          "visibility" : "PUBLIC",
+          "descriptor" : {
+            "previousState" : "EXPERIMENTAL",
+            "nextState" : "STABLE"
+          }
+        } ],
+        "methods" : [ ],
+        "fields" : [ {
+          "declaration" : "int x",
+          "visibility" : "PKG",
+          "descriptor" : {
+            "previousState" : "MAINTAINED",
+            "nextState" : "MAINTAINED"
+          }
+        } ]
+      } ]
+    } ],
+    "classes" : [ ]
+  } ]
+}
