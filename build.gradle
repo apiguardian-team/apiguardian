@@ -70,9 +70,11 @@ jar {
 			'Specification-Vendor': 'apiguardian.org',
 			'Implementation-Title': project.name,
 			'Implementation-Version': project.version,
-			'Implementation-Vendor': 'apiguardian.org',
-			'Automatic-Module-Name': 'org.apiguardian.api'
+			'Implementation-Vendor': 'apiguardian.org'
 		)
+	}
+	from('src/main/module/org.apiguardian.api') {
+		include 'module-info.class'
 	}
 }
 
