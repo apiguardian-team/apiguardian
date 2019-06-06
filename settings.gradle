@@ -1,8 +1,7 @@
 rootProject.name = 'apiguardian-api'
 
 // Require Java 11
-int javaVersion = Integer.valueOf(JavaVersion.current().getMajorVersion())
-if (javaVersion != 11) {
-    throw new GradleException('The OpenTest4J build requires Java 11. ' +
-            "Currently executing with Java ${javaVersion}.")
+if (!JavaVersion.current().java11) {
+    throw new GradleException('The @API Guardian build requires Java 11. ' +
+            "Currently executing with Java ${JavaVersion.current()}.")
 }
