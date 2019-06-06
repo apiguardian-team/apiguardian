@@ -13,10 +13,10 @@ The @API Guardian library is deployed to maven central. You can simply add it as
 <dependency>
     <groupId>org.apiguardian</groupId>
     <artifactId>apiguardian-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 ### Gradle/Grails
 ```
-compile 'org.apiguardian:apiguardian-api:1.0.0'
+compile 'org.apiguardian:apiguardian-api:1.1.0'
 ```
