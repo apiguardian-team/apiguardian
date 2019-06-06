@@ -1,19 +1,14 @@
 import java.text.SimpleDateFormat
 
-buildscript {
-	repositories {
-		maven {
-			url 'https://plugins.gradle.org/m2/'
-		}
-	}
-	dependencies {
-		classpath 'org.ajoberstar:gradle-git:1.7.2'
-		classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
-	}
-}
-
 plugins {
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'maven'
+	id 'signing'
+	id 'ru.vyarus.animalsniffer' version '1.5.0'
 	id 'net.nemerosa.versioning' version '2.6.1'
+	id 'org.ajoberstar.github-pages' version '1.7.2'
 }
 
 Date buildTimeAndDate = new Date()
@@ -22,15 +17,6 @@ ext {
 	buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
 	builtByValue = project.hasProperty('builtBy') ? project.builtBy : project.defaultBuiltBy
 }
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
-apply plugin: 'net.nemerosa.versioning'
-apply plugin: "org.ajoberstar.github-pages"
 
 description = '@API Guardian'
 
@@ -99,8 +85,8 @@ artifacts {
 	archives javadocJar
 }
 
-animalsniffer {
-	signature = "org.codehaus.mojo.signature:java16:+@signature"
+dependencies {
+	signature('org.codehaus.mojo.signature:java16:1.1@signature')
 }
 
 def signArtifacts = !project.version.contains('SNAPSHOT')
@@ -211,9 +197,3 @@ githubPages {
 
 prepareGhPages.dependsOn(prepareDocsForUploadToGhPages)
 prepareGhPages.dependsOn(createCurrentDocsFolder)
-
-task wrapper(type: Wrapper) {
-	description = 'Generates gradlew and gradlew.bat scripts'
-	gradleVersion = '4.1'
-	distributionType = Wrapper.DistributionType.BIN
-}
