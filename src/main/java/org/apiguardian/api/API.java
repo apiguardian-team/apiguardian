@@ -83,6 +83,12 @@ public @interface API {
 
 		/**
 		 * Should no longer be used. Might disappear in the next minor release.
+		 *
+		 * <p>This status is usually used in combination with the standard annotation
+		 * {@link Deprecated @Deprecated} because that annotation is recognized by
+		 * IDEs and the compiler. However, there are also cases where this status
+		 * can be used on its own, for example when transitioning a {@link #MAINTAINED}
+		 * feature to an {@link #INTERNAL} one.
 		 */
 		DEPRECATED,
 
