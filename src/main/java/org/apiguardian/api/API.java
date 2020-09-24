@@ -19,6 +19,7 @@ package org.apiguardian.api;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PACKAGE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -38,9 +39,13 @@ import java.lang.annotation.Target;
  * a class annotated with {@code @API(status = STABLE)} may declare a constructor
  * for internal usage that is annotated with {@code @API(status = INTERNAL)}.
  *
+ * <p>If {@code @API} is present on a package, it is considered to hold for all
+ * public types in its package. The same rules for lowered stability apply as
+ * if they were specified on a type.
+ *
  * @since 1.0
  */
-@Target({ TYPE, METHOD, CONSTRUCTOR, FIELD })
+@Target({ TYPE, METHOD, CONSTRUCTOR, FIELD, PACKAGE })
 @Retention(RUNTIME)
 @Documented
 public @interface API {
