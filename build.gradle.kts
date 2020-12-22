@@ -9,7 +9,7 @@ plugins {
 	id("maven-publish")
 	id("signing")
 	id("net.nemerosa.versioning") version "2.14.0"
-	id("org.ajoberstar.github-pages") version "1.7.2"
+	id("org.ajoberstar.git-publish") version "3.0.0"
 	id("de.marcphilipp.nexus-publish") version "0.4.0"
 }
 
@@ -21,6 +21,7 @@ val builtByValue = project.findProperty("builtBy") ?: project.property("defaultB
 val isSnapshot = project.version.toString().contains("SNAPSHOT")
 val docsVersion = if (isSnapshot) "snapshot" else project.version
 val docsDir = File(buildDir, "ghpages-docs")
+val replaceCurrentDocs = project.hasProperty("replaceCurrentDocs")
 
 description = "@API Guardian"
 val moduleName = "org.apiguardian.api"
@@ -117,14 +118,14 @@ tasks {
 
 	val createCurrentDocsFolder by registering(Copy::class) {
 		dependsOn(prepareDocsForUploadToGhPages)
-		onlyIf { project.hasProperty("replaceCurrentDocs") }
+		enabled = replaceCurrentDocs
 		outputs.dir("${docsDir}/current")
 
 		from("${docsDir}/${docsVersion}")
 		into("${docsDir}/current")
 	}
 
-	prepareGhPages {
+	gitPublishCommit {
 		dependsOn(prepareDocsForUploadToGhPages, createCurrentDocsFolder)
 	}
 }
@@ -176,18 +177,20 @@ publishing {
 	}
 }
 
-githubPages {
-	setRepoUri("https://github.com/apiguardian-team/apiguardian.git")
+gitPublish {
+	repoUri.set("https://github.com/apiguardian-team/apiguardian.git")
+	branch.set("gh-pages")
 
-	credentials.apply {
-		username = project.findProperty("githubToken")?.toString() ?: ""
-		password = ""
-	}
-
-	pages.apply {
+	contents {
 		from(docsDir)
 		into("docs")
 	}
 
-	deleteExistingFiles = false
+	preserve {
+		include("**/*")
+		exclude("docs/$docsVersion/**")
+		if (replaceCurrentDocs) {
+			exclude("docs/current/**")
+		}
+	}
 }
