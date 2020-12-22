@@ -1,7 +1,0 @@
-rootProject.name = 'apiguardian-api'
-
-// Require Java 11
-if (!JavaVersion.current().java11) {
-    throw new GradleException('The @API Guardian build requires Java 11. ' +
-            "Currently executing with Java ${JavaVersion.current()}.")
-}
