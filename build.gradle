@@ -6,7 +6,7 @@ plugins {
 	id 'idea'
 	id 'maven'
 	id 'signing'
-	id 'net.nemerosa.versioning' version '2.6.1'
+	id 'net.nemerosa.versioning' version '2.14.0'
 	id 'org.ajoberstar.github-pages' version '1.7.2'
 }
 
