@@ -6,7 +6,7 @@ Library that provides the `@API` annotation that is used to annotate public type
 
 ## How to use it
 
-The @API Guardian library is deployed to maven central. You can simply add it as a dependency:
+The @API Guardian library is deployed to Maven Central. You can simply add it as a dependency:
 
 ### Apache Maven
 ```xml
@@ -16,7 +16,14 @@ The @API Guardian library is deployed to maven central. You can simply add it as
     <version>1.1.0</version>
 </dependency>
 ```
-### Gradle/Grails
-```
-compile 'org.apiguardian:apiguardian-api:1.1.0'
+
+### Gradle
+
+```gradle
+repositories {
+    mavenCentral()
+}
+dependencies {    
+    api("org.apiguardian:apiguardian-api:1.1.0")
+}
 ```
