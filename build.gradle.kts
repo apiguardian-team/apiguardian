@@ -102,6 +102,13 @@ tasks {
 		}
 	}
 
+	withType<Jar>().configureEach {
+		from(rootDir) {
+			include("LICENSE")
+			into("META-INF")
+		}
+	}
+
 	val prepareDocsForUploadToGhPages by registering(Copy::class) {
 		dependsOn(javadoc)
 		outputs.dir(docsDir)
