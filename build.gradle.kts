@@ -102,6 +102,13 @@ tasks {
 		}
 	}
 
+	named<Jar>("javadocJar") {
+		from(javadoc.map { File(it.destinationDir, "element-list") }) {
+			// For compatibility with older tools, e.g. NetBeans 11
+			rename { "package-list" }
+		}
+	}
+
 	withType<Jar>().configureEach {
 		from(rootDir) {
 			include("LICENSE")
@@ -115,6 +122,11 @@ tasks {
 
 		from("$buildDir/docs") {
 			include("javadoc/**")
+		}
+		from("$buildDir/docs/javadoc") {
+			// For compatibility with pre JDK 10 versions of the Javadoc tool
+			include("element-list")
+			rename { "api/package-list" }
 		}
 		into("${docsDir}/${docsVersion}")
 		filesMatching("javadoc/**") {
