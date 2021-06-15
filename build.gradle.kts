@@ -8,6 +8,7 @@ plugins {
 	id("idea")
 	id("maven-publish")
 	id("signing")
+	id("biz.aQute.bnd.builder") version "5.3.0"
 	id("net.nemerosa.versioning") version "2.14.0"
 	id("org.ajoberstar.git-publish") version "3.0.0"
 	id("de.marcphilipp.nexus-publish") version "0.4.0"
@@ -78,7 +79,13 @@ tasks {
 				"Specification-Vendor" to "apiguardian.org",
 				"Implementation-Title" to project.name,
 				"Implementation-Version" to project.version,
-				"Implementation-Vendor" to "apiguardian.org"
+				"Implementation-Vendor" to "apiguardian.org",
+				"Bundle-Name" to project.name,
+				"Bundle-Description" to project.description,
+				"Bundle-DocURL" to "https://github.com/apiguardian-team/apiguardian",
+				"Bundle-Vendor" to "apiguardian.org",
+				"-exportcontents" to "org.apiguardian.api",
+				"Bundle-SymbolicName" to "${moduleName}"
 			)
 		}
 		from(files(compileModule.map { "${it.destinationDir}/${moduleName}" })) {
