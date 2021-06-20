@@ -40,7 +40,7 @@ val moduleSourceDir = file("src/module/java")
 
 tasks {
 	compileJava {
-		options.compilerArgs = listOf("--release", "6")
+		options.release.set(6)
 	}
 
 	val compileModule by registering(JavaCompile::class) {
@@ -49,8 +49,8 @@ tasks {
 		classpath = files(compileJava.map { it.classpath })
 		inputs.property("moduleName", moduleName)
 		inputs.property("moduleVersion", project.version)
+		options.release.set(9)
 		options.compilerArgs = listOf(
-			"--release", "9",
 			"--module-version", project.version as String,
 			"--module-source-path", moduleSourceDir.toString(),
 			"--patch-module", "$moduleName=${sourceSets.main.get().allJava.srcDirs.joinToString(":")}",
