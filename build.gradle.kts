@@ -85,7 +85,7 @@ tasks {
 				"Bundle-DocURL" to "https://github.com/apiguardian-team/apiguardian",
 				"Bundle-Vendor" to "apiguardian.org",
 				"-exportcontents" to "org.apiguardian.api",
-				"Bundle-SymbolicName" to "${moduleName}"
+				"Bundle-SymbolicName" to moduleName
 			)
 		}
 		from(files(compileModule.map { "${it.destinationDir}/${moduleName}" })) {
