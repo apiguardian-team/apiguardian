@@ -13,7 +13,7 @@ The @API Guardian library is deployed to Maven Central. You can simply add it as
 <dependency>
     <groupId>org.apiguardian</groupId>
     <artifactId>apiguardian-api</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -24,6 +24,6 @@ repositories {
     mavenCentral()
 }
 dependencies {    
-    api("org.apiguardian:apiguardian-api:1.1.1")
+    compileOnlyApi("org.apiguardian:apiguardian-api:1.1.2")
 }
 ```
