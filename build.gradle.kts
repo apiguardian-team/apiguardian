@@ -90,6 +90,11 @@ tasks {
 		from(files(compileModule.map { "${it.destinationDir}/${moduleName}" })) {
 			include("module-info.class")
 		}
+
+		from(".") {
+			include("LICENSE")
+			include("COPYRIGHT")
+		}
 	}
 
 	javadoc {
