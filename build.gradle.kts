@@ -90,11 +90,6 @@ tasks {
 		from(files(compileModule.map { "${it.destinationDir}/${moduleName}" })) {
 			include("module-info.class")
 		}
-
-		from(".") {
-			include("LICENSE")
-			include("COPYRIGHT")
-		}
 	}
 
 	javadoc {
@@ -123,6 +118,7 @@ tasks {
 	withType<Jar>().configureEach {
 		from(rootDir) {
 			include("LICENSE")
+			include("COPYRIGHT")
 			into("META-INF")
 		}
 	}
