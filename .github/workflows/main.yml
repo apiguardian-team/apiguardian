@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-java@b6e674f4b717d7b0ae3baee0fbe79f498905dfde # v1
         with:
           java-version: 11
-      - uses: eskatos/gradle-command-action@b3afdc78a7849557ab26e243ccf07548086da025 # v1
+      - uses: eskatos/gradle-command-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3
         with:
           arguments: --stacktrace build
 
