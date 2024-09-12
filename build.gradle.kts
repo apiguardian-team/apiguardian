@@ -8,7 +8,7 @@ plugins {
 	id("maven-publish")
 	id("signing")
 	id("biz.aQute.bnd.builder") version "5.3.0"
-	id("net.nemerosa.versioning") version "2.14.0"
+	id("net.nemerosa.versioning") version "2.15.1"
 	id("org.ajoberstar.git-publish") version "3.0.1"
 	id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
