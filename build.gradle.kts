@@ -153,7 +153,7 @@ tasks {
 		into(docsDir.map { it.dir("current") })
 	}
 
-	gitPublishCommit {
+	gitPublishCopy {
 		dependsOn(prepareDocsForUploadToGhPages, createCurrentDocsFolder)
 	}
 }
