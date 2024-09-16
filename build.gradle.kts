@@ -39,7 +39,10 @@ val moduleSourceDir = file("src/module/java")
 
 tasks {
 	compileJava {
-		options.release.set(6)
+		options.release = 6
+		javaCompiler = project.javaToolchains.compilerFor {
+			languageVersion.set(JavaLanguageVersion.of(11))
+		}
 	}
 
 	val compileModule by registering(JavaCompile::class) {
