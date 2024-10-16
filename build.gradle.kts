@@ -7,20 +7,20 @@ plugins {
 	id("idea")
 	id("maven-publish")
 	id("signing")
-	id("biz.aQute.bnd.builder") version "5.3.0"
-	id("net.nemerosa.versioning") version "2.14.0"
-	id("org.ajoberstar.git-publish") version "3.0.0"
-	id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+	id("biz.aQute.bnd.builder") version "7.0.0"
+	id("net.nemerosa.versioning") version "3.1.0"
+	id("org.ajoberstar.git-publish") version "4.2.2"
+	id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
-val buildTimeAndDate = OffsetDateTime.now()
-val buildDate = DateTimeFormatter.ISO_LOCAL_DATE.format(buildTimeAndDate)
-val buildTime = DateTimeFormatter.ofPattern("HH:mm:ss.SSSZ").format(buildTimeAndDate)
+val buildTimeAndDate: OffsetDateTime = OffsetDateTime.now()
+val buildDate: String = DateTimeFormatter.ISO_LOCAL_DATE.format(buildTimeAndDate)
+val buildTime: String = DateTimeFormatter.ofPattern("HH:mm:ss.SSSZ").format(buildTimeAndDate)
 val builtByValue = project.findProperty("builtBy") ?: project.property("defaultBuiltBy")
 
 val isSnapshot = project.version.toString().contains("SNAPSHOT")
-val docsVersion = if (isSnapshot) "snapshot" else project.version
-val docsDir = File(buildDir, "ghpages-docs")
+val docsVersion = if (isSnapshot) "snapshot" else project.version.toString()
+val docsDir = layout.buildDirectory.dir("ghpages-docs")
 val replaceCurrentDocs = project.hasProperty("replaceCurrentDocs")
 
 description = "@API Guardian"
@@ -39,12 +39,15 @@ val moduleSourceDir = file("src/module/java")
 
 tasks {
 	compileJava {
-		options.release.set(6)
+		options.release = 6
+		javaCompiler = project.javaToolchains.compilerFor {
+			languageVersion.set(JavaLanguageVersion.of(11))
+		}
 	}
 
 	val compileModule by registering(JavaCompile::class) {
 		source(moduleSourceDir)
-		destinationDir = file("$buildDir/classes/java/modules")
+		destinationDirectory = layout.buildDirectory.dir("classes/java/modules")
 		classpath = files(compileJava.map { it.classpath })
 		inputs.property("moduleName", moduleName)
 		inputs.property("moduleVersion", project.version)
@@ -87,7 +90,7 @@ tasks {
 				"Bundle-SymbolicName" to moduleName
 			)
 		}
-		from(files(compileModule.map { "${it.destinationDir}/${moduleName}" })) {
+		from(files(compileModule.flatMap { destinationDirectory.map { it.dir(moduleName) } })) {
 			include("module-info.class")
 		}
 	}
@@ -127,15 +130,15 @@ tasks {
 		dependsOn(javadoc)
 		outputs.dir(docsDir)
 
-		from("$buildDir/docs") {
+		from(layout.buildDirectory.dir("docs")) {
 			include("javadoc/**")
 		}
-		from("$buildDir/docs/javadoc") {
+		from(layout.buildDirectory.dir("docs/javadoc")) {
 			// For compatibility with pre JDK 10 versions of the Javadoc tool
 			include("element-list")
 			rename { "api/package-list" }
 		}
-		into("${docsDir}/${docsVersion}")
+		into(docsDir.map { it.dir(docsVersion) })
 		filesMatching("javadoc/**") {
 			path = path.replace("javadoc/", "api/")
 		}
@@ -147,11 +150,11 @@ tasks {
 		enabled = replaceCurrentDocs
 		outputs.dir("${docsDir}/current")
 
-		from("${docsDir}/${docsVersion}")
-		into("${docsDir}/current")
+		from(docsDir.map { it.dir(docsVersion) })
+		into(docsDir.map { it.dir("current") })
 	}
 
-	gitPublishCommit {
+	gitPublishCopy {
 		dependsOn(prepareDocsForUploadToGhPages, createCurrentDocsFolder)
 	}
 }
@@ -185,7 +188,7 @@ publishing {
 				licenses {
 					license {
 						name.set("The Apache License, Version 2.0")
-						url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+						url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
 					}
 				}
 				developers {
