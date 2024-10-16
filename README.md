@@ -6,9 +6,10 @@ Library that provides the `@API` annotation that is used to annotate public type
 
 ## How to use it
 
-The @API Guardian library is deployed to Maven Central. You can simply add it as a dependency:
+The @API Guardian library is deployed to Maven Central. To avoid compile-time warnings, you need to declare it as a _transitive_ compile-time dependency.
 
 ### Apache Maven
+
 ```xml
 <dependency>
     <groupId>org.apiguardian</groupId>
@@ -25,5 +26,13 @@ repositories {
 }
 dependencies {    
     compileOnlyApi("org.apiguardian:apiguardian-api:1.1.2")
+}
+```
+
+### Java Platform Module System
+
+```java
+module org.example {
+    requires static transitive org.apiguardian.api;
 }
 ```
