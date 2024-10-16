@@ -121,6 +121,7 @@ tasks {
 	withType<Jar>().configureEach {
 		from(rootDir) {
 			include("LICENSE")
+			include("COPYRIGHT")
 			into("META-INF")
 		}
 	}
