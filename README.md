@@ -29,10 +29,26 @@ dependencies {
 }
 ```
 
+Using `compileOnlyApi` will include the library on the compile classpath of downstream projects but not their runtime classpath. If you want downstream projects to be able to use the `@API` annotation at runtime, you should declare it as `api` instead:
+
+```gradle
+dependencies {    
+    api("org.apiguardian:apiguardian-api:1.1.2")
+}
+```
+
 ### Java Platform Module System
 
 ```java
 module org.example {
     requires static transitive org.apiguardian.api;
+}
+```
+
+Using `static` will only include the library on the module path of downstream projects at compile time but not at runtime. If you want downstream projects to be able to use the `@API` annotation at runtime, you should declare it without `static` instead:
+
+```java
+module org.example {
+    requires transitive org.apiguardian.api;
 }
 ```
