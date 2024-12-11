@@ -207,6 +207,9 @@ gitPublish {
 	repoUri.set("https://github.com/apiguardian-team/apiguardian.git")
 	branch.set("gh-pages")
 
+	username = providers.environmentVariable("GIT_USERNAME")
+	password = providers.environmentVariable("GIT_PASSWORD")
+
 	contents {
 		from(docsDir)
 		into("docs")
