@@ -71,6 +71,11 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
+      - name: Configure Git
+        shell: bash
+        run: |
+          git config --global user.name "JUnit Team"
+          git config --global user.email "team@junit.org"
       - name: 'Upload Documentation'
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
