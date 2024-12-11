@@ -204,8 +204,10 @@ publishing {
 }
 
 gitPublish {
-	repoUri.set("https://github.com/apiguardian-team/apiguardian.git")
-	branch.set("gh-pages")
+	repoUri = "https://github.com/apiguardian-team/apiguardian.git"
+	referenceRepoUri = projectDir.toURI().toString()
+
+	branch = "gh-pages"
 
 	username = providers.environmentVariable("GIT_USERNAME")
 	password = providers.environmentVariable("GIT_PASSWORD")
