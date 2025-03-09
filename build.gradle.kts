@@ -9,7 +9,7 @@ plugins {
 	id("signing")
 	id("biz.aQute.bnd.builder") version "7.1.0"
 	id("net.nemerosa.versioning") version "3.1.0"
-	id("org.ajoberstar.git-publish") version "5.1.0"
+	id("org.ajoberstar.git-publish") version "5.1.1"
 	id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
