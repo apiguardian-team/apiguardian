@@ -89,7 +89,7 @@ tasks {
 				"Bundle-SymbolicName" to moduleName
 			)
 		}
-		from(files(compileModule.flatMap { destinationDirectory.map { it.dir(moduleName) } })) {
+		from(compileModule.flatMap { it.destinationDirectory }.map { it.dir(moduleName) }) {
 			include("module-info.class")
 		}
 	}
