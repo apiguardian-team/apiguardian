@@ -10,7 +10,6 @@ plugins {
 	id("biz.aQute.bnd.builder") version "7.1.0"
 	id("net.nemerosa.versioning") version "3.1.0"
 	id("org.ajoberstar.git-publish") version "5.1.1"
-	id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 val buildTimeAndDate: OffsetDateTime = OffsetDateTime.now()
@@ -165,13 +164,6 @@ if (!isSnapshot) {
 	}
 }
 
-nexusPublishing {
-	packageGroup.set(group.toString())
-	repositories {
-		sonatype()
-	}
-}
-
 publishing {
 	publications {
 		create<MavenPublication>("maven") {
@@ -198,6 +190,16 @@ publishing {
 						email.set("team@apiguardian.org")
 					}
 				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			name = "mavenCentralSnapshots"
+			url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+			credentials {
+				username = providers.gradleProperty("mavenCentralUsername").orNull
+				password = providers.gradleProperty("mavenCentralPassword").orNull
 			}
 		}
 	}
