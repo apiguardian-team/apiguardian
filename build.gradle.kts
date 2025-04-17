@@ -10,6 +10,7 @@ plugins {
 	id("biz.aQute.bnd.builder") version "7.1.0"
 	id("net.nemerosa.versioning") version "3.1.0"
 	id("org.ajoberstar.git-publish") version "5.1.1"
+	id("com.gradleup.nmcp") version "0.0.9"
 }
 
 val buildTimeAndDate: OffsetDateTime = OffsetDateTime.now()
@@ -203,6 +204,14 @@ publishing {
 				password = providers.gradleProperty("mavenCentralPassword").orNull
 			}
 		}
+	}
+}
+
+nmcp {
+	publish("maven") {
+		username = providers.gradleProperty("mavenCentralUsername")
+		password = providers.gradleProperty("mavenCentralPassword")
+		publicationType = providers.gradleProperty("mavenCentralPublicationType").orElse("USER_MANAGED")
 	}
 }
 
