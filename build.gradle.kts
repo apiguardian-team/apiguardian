@@ -160,6 +160,7 @@ tasks {
 
 if (!isSnapshot) {
 	signing {
+		useGpgCmd()
 		sign(publishing.publications)
 	}
 }
