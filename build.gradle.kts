@@ -208,10 +208,10 @@ publishing {
 }
 
 nmcp {
-	publish("maven") {
+	centralPortal {
 		username = providers.gradleProperty("mavenCentralUsername")
 		password = providers.gradleProperty("mavenCentralPassword")
-		publicationType = providers.gradleProperty("mavenCentralPublicationType").orElse("USER_MANAGED")
+		publishingType = providers.gradleProperty("mavenCentralPublishingType").orElse("USER_MANAGED")
 	}
 }
 
