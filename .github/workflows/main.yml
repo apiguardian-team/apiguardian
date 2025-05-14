@@ -53,7 +53,7 @@ jobs:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-        run: ./gradlew publishAllPublicationsToMavenCentralSnapshotsRepository -x check
+        run: ./gradlew publishAllPublicationsToCentralSnapshots -x check
 
   update_documentation:
     name: Update Snapshot Documentation
