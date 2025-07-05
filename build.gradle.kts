@@ -10,7 +10,7 @@ plugins {
 	id("biz.aQute.bnd.builder") version "7.1.0"
 	id("net.nemerosa.versioning") version "3.1.0"
 	id("org.ajoberstar.git-publish") version "5.1.1"
-	id("com.gradleup.nmcp") version "0.2.1"
+	id("com.gradleup.nmcp") version "1.0.0"
 }
 
 val buildTimeAndDate: OffsetDateTime = OffsetDateTime.now()
