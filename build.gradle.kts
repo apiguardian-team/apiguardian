@@ -72,7 +72,7 @@ tasks {
 		manifest {
 			attributes(
 				"Created-By" to "${System.getProperty("java.version")} (${System.getProperty("java.vendor")} ${System.getProperty("java.vm.version")})",
-				"Built-By" to builtByValue,
+				"Built-By" to builtByValue!!,
 				"Build-Date" to buildDate,
 				"Build-Time" to buildTime,
 				"Build-Revision" to versioning.info.commit,
@@ -83,7 +83,7 @@ tasks {
 				"Implementation-Version" to project.version,
 				"Implementation-Vendor" to "apiguardian.org",
 				"Bundle-Name" to project.name,
-				"Bundle-Description" to project.description,
+				"Bundle-Description" to project.description!!,
 				"Bundle-DocURL" to "https://github.com/apiguardian-team/apiguardian",
 				"Bundle-Vendor" to "apiguardian.org",
 				"-exportcontents" to "org.apiguardian.api",
