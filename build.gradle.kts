@@ -8,7 +8,7 @@ plugins {
 	id("maven-publish")
 	id("signing")
 	id("biz.aQute.bnd.builder") version "7.2.3"
-	id("net.nemerosa.versioning") version "3.1.0"
+	id("net.nemerosa.versioning") version "4.0.1"
 	id("org.ajoberstar.git-publish") version "6.0.0"
 	id("com.gradleup.nmcp") version "1.4.4"
 }
