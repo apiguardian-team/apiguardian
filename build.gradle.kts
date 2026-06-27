@@ -215,6 +215,14 @@ nmcp {
 	}
 }
 
+tasks.nmcpZipAllPublications {
+	eachFile {
+		if (name.contains(".asc.")) {
+			exclude()
+		}
+	}
+}
+
 gitPublish {
 	repoUri = "https://github.com/apiguardian-team/apiguardian.git"
 	referenceRepoUri = projectDir.toURI().toString()
