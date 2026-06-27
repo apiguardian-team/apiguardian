@@ -6,7 +6,7 @@
   packageRules: [
     {
       "matchPackageNames": [
-        "com.gradleup.nmcp",
+        "com.gradleup.nmcp:*",
       ],
       "allowedVersions": "<1.6.0", // due to https://github.com/GradleUp/nmcp/issues/262
     },
