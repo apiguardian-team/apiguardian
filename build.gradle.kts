@@ -30,6 +30,11 @@ repositories {
 	mavenCentral()
 }
 
+dependencies {
+	testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
+}
+
 java {
 	withJavadocJar()
 	withSourcesJar()
@@ -38,6 +43,10 @@ java {
 val moduleSourceDir = file("src/module/java")
 
 tasks {
+	test {
+		useJUnitPlatform()
+	}
+
 	compileJava {
 		options.release = 6
 		javaCompiler = project.javaToolchains.compilerFor {
