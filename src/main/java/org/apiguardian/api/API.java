@@ -35,12 +35,17 @@ import java.lang.annotation.Target;
  *
  * <p>If {@code @API} is present on a type, it is considered to hold for all
  * public members of the type as well. However, a member of such an annotated
- * type is allowed to declare a {@link Status} of lower stability. For example,
+ * type is allowed to declare a {@link Status} of different stability. For example,
  * a class annotated with {@code @API(status = STABLE)} may declare a constructor
- * for internal usage that is annotated with {@code @API(status = INTERNAL)}.
+ * for internal usage that is annotated with {@code @API(status = INTERNAL)}. On
+ * the other hand, a class that implements a step in the middle of a fluent API
+ * call chain may be annotated with {@code @API(status = INTERNAL)} ("don't rely
+ * on the name of this class"), but its methods may be annotated with
+ * {@code @API(status = STABLE)} ("you can rely on this method being available
+ * here").
  *
  * <p>If {@code @API} is present on a package, it is considered to hold for all
- * public types in its package. The same rules for lowered stability apply as
+ * public types in its package. The same rules for different stability apply as
  * if they were specified on a type.
  *
  * @since 1.0
